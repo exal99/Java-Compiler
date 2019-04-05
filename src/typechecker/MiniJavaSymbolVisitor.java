@@ -24,6 +24,14 @@ public class MiniJavaSymbolVisitor extends DeapthFirstVisitor<Void>{
 		cTable = null;
 		mTable = null;
 	}
+	
+	public GlobalTable getGlobals() {
+		return gTable;
+	}
+	
+	public boolean isError() {
+		return error.isError();
+	}
 
 	@Override
 	public Void visit(Program prog) {
@@ -36,6 +44,12 @@ public class MiniJavaSymbolVisitor extends DeapthFirstVisitor<Void>{
 
 	@Override
 	public Void visit(MainClass mainClass) {
+		cTable = gTable.addClass(mainClass.className.toString());
+		mTable = cTable.addMethod("main", null);
+		mTable.addFormal(mainClass.varName.toString(), null);
+		mainClass.statement.accept(this);
+		mTable = null;
+		cTable = null;
 		return null;
 	}
 
@@ -43,8 +57,7 @@ public class MiniJavaSymbolVisitor extends DeapthFirstVisitor<Void>{
 	public Void visit(ClassDeclSimple classDecl) {
 		ClassTable table = gTable.addClass(classDecl.className.toString());
 		if (table == null) {
-			error.complain(error.formatDuplicate("class", classDecl.className.toString(), gTable.getName(), classDecl.getPos()));
-			error.complain("Multiple definitions of class: '" + classDecl.className + "'");
+			error.complain(error.formatDuplicate("class", classDecl.className.toString()), gTable.getName(), classDecl.getPos());
 		} else {
 			cTable = table;
 			for (int i = 0; i < classDecl.vars.size(); i++) {
@@ -64,9 +77,9 @@ public class MiniJavaSymbolVisitor extends DeapthFirstVisitor<Void>{
 		ClassTable table = gTable.addClass(classDecl.className.toString(), classDecl.superName.toString());
 		if (table == null) {
 			if (gTable.contains(classDecl.className.toString()))
-				error.complain(error.formatDuplicate("class", classDecl.className.toString(), gTable.getName(), classDecl.getPos()));
+				error.complain(error.formatDuplicate("class", classDecl.className.toString()), gTable.getName(), classDecl.getPos());
 			else
-				error.complain("No class named: '" + classDecl.superName + "'");
+				error.complain("No class named: '" + classDecl.superName + "'", "GLOBAL", classDecl.getPos());
 		} else {
 			cTable = table;
 			for (int i = 0; i < classDecl.vars.size(); i++) {
@@ -85,10 +98,10 @@ public class MiniJavaSymbolVisitor extends DeapthFirstVisitor<Void>{
 	public Void visit(VarDecl varDecl) {
 		if (mTable != null) {
 			if (!mTable.addLocal(varDecl.name.toString(), varDecl.type))
-				error.complain(error.formatDuplicate("variable", varDecl.name.toString(), cTable.getName() + "." + mTable.getName(), varDecl.getPos()));
+				error.complain(error.formatDuplicate("variable", varDecl.name.toString()), cTable.getName() + "." + mTable.getName(), varDecl.getPos());
 		} else {
 			if (!cTable.addField(varDecl.name.toString(), varDecl.type))
-				error.complain(error.formatDuplicate("field", varDecl.name.toString(), cTable.getName(), varDecl.getPos()));
+				error.complain(error.formatDuplicate("field", varDecl.name.toString()), cTable.getName(), varDecl.getPos());
 		}
 		
 		return null;
@@ -98,7 +111,7 @@ public class MiniJavaSymbolVisitor extends DeapthFirstVisitor<Void>{
 	public Void visit(MethodDecl methodDecl) {
 		MethodTable newMethod = cTable.addMethod(methodDecl.name.toString(), methodDecl.type);
 		if (newMethod == null) {
-			error.complain(error.formatDuplicate("method", methodDecl.name.toString(), cTable.getName(), methodDecl.getPos()));
+			error.complain(error.formatDuplicate("method", methodDecl.name.toString()), cTable.getName(), methodDecl.getPos());
 		} else {
 			mTable = newMethod;
 			

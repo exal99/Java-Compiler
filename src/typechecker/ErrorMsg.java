@@ -7,22 +7,16 @@ public class ErrorMsg {
 		errors = false;
 	}
 	
-	public void complain(String msg) {
+	public void complain(String msg, String pos, int lineno) {
 		errors = true;
-		System.out.println(msg);
+		System.out.println(msg + "\n\tat " + pos + ": " + lineno + "\n");
 	}
 	
 	public String formatDuplicate(String type, String name) {
-		return formatDuplicate(type, name, "", 0);
+
+		return "Duplicate definitions of " + type + ": '" + name + "'";
 	}
-	
-	public String formatDuplicate(String type, String name, String pos, int lineno) {
-		if (pos.length() > 0) {
-			return "Duplicate definitions of " + type + ": '" + name + "'\nat " + pos + "(" + lineno + ")";
-		} else {
-			return "Duplicate definitions of " + type + ": '" + name;
-		}
-	}
+
 	
 	public String formatTypeMissmatch(String got, String expected) {
 		return "Type missmatch: cannot convert from " + got + " to " + expected;

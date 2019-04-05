@@ -13,8 +13,13 @@ public class ClassTable extends NamedTable<Type> {
 	
 	public ClassTable(String name, ClassTable base) {
 		super(name, base);
-		fields = new Table<Type>(base.fields);
-		methods = new Table<MethodTable>(base.methods);
+		if (base != null) {
+			fields = new Table<Type>(base.fields);
+			methods = new Table<MethodTable>(base.methods);
+		} else {
+			fields = new Table<Type>(null);
+			methods = new Table<MethodTable>(null);
+		}
 	}
 	
 	public boolean addField(String name, Type type) {
