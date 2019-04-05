@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class Print extends Statement {
 	
-	private Expression exp;
+	public Expression exp;
 	
 	public Print(int pos, Expression exp) {
 		super(pos);
@@ -10,8 +10,8 @@ public class Print extends Statement {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

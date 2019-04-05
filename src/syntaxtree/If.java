@@ -2,8 +2,8 @@ package syntaxtree;
 
 public class If extends Statement {
 	
-	private Expression exp;
-	private Statement s, elseS;
+	public Expression exp;
+	public Statement s, elseS;
 	
 	public If(int pos, Expression exp, Statement s, Statement elseS) {
 		super(pos);
@@ -13,8 +13,8 @@ public class If extends Statement {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

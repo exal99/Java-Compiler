@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class ClassDeclExtends extends ClassDecl {
 	
-	private Identifier superName;
+	public Identifier superName;
 	
 	public ClassDeclExtends(int pos, Identifier className, Identifier superName, VarDeclList vars, MethodDeclList methods) {
 		super(pos, className, vars, methods);
@@ -10,8 +10,8 @@ public class ClassDeclExtends extends ClassDecl {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

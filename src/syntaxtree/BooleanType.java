@@ -8,8 +8,17 @@ public class BooleanType extends Type {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
+	
+	@Override
+	public String toString() {
+		return "boolean";
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof BooleanType;
+	}
 }

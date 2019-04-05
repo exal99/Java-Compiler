@@ -28,7 +28,8 @@ public abstract class SyntaxList<T extends AbstractSyntax> extends AbstractSynta
 	
 	@Deprecated
 	@Override
-	public void accept(Visitor v) {
+	public <E> E accept(Visitor<E> v) {
+		return null;
 	}
 	
 	@Deprecated

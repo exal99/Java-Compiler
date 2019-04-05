@@ -2,8 +2,8 @@ package syntaxtree;
 
 public class While extends Statement {
 	
-	private Expression exp;
-	private Statement s;
+	public Expression exp;
+	public Statement s;
 	
 	public While(int pos, Expression exp, Statement s) {
 		super(pos);
@@ -12,9 +12,8 @@ public class While extends Statement {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		// TODO Auto-generated method stub
-
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

@@ -2,12 +2,12 @@ package syntaxtree;
 
 public class MethodDecl extends AbstractSyntax {
 	
-	private Type type;
-	private Identifier name;
-	private FormalList args;
-	private VarDeclList vars;
-	private StatementList statements;
-	private Expression exp;
+	public Type type;
+	public Identifier name;
+	public FormalList args;
+	public VarDeclList vars;
+	public StatementList statements;
+	public Expression exp;
 	
 	public MethodDecl(int pos, Type type, Identifier name, FormalList args, VarDeclList vars, StatementList statements, Expression exp) {
 		super(pos);
@@ -20,8 +20,8 @@ public class MethodDecl extends AbstractSyntax {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

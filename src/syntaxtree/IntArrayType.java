@@ -8,8 +8,17 @@ public class IntArrayType extends Type {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
+	}
+	
+	@Override
+	public String toString() {
+		return "int[]";
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		return other instanceof IntArrayType;
+	}
 }

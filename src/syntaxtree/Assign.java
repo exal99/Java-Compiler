@@ -2,8 +2,8 @@ package syntaxtree;
 
 public class Assign extends Statement {
 	
-	private Identifier name;
-	private Expression value;
+	public Identifier name;
+	public Expression value;
 	
 	public Assign(int pos, Identifier name, Expression value) {
 		super(pos);
@@ -12,8 +12,7 @@ public class Assign extends Statement {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
 }

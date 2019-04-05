@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class IdentifierExpression extends Expression {
 	
-	private String id;
+	public String id;
 	
 	public IdentifierExpression(int pos, String id) {
 		super(pos);
@@ -10,8 +10,8 @@ public class IdentifierExpression extends Expression {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

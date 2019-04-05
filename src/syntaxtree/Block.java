@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class Block extends Statement {
 	
-	private StatementList statements;
+	public StatementList statements;
 	
 	public Block(int pos, StatementList statements) {
 		super(pos);
@@ -10,8 +10,8 @@ public class Block extends Statement {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

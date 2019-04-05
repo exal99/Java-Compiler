@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class IntegerLiteral extends Expression {
 	
-	private int value;
+	public int value;
 	
 	public IntegerLiteral(int pos, int value) {
 		super(pos);
@@ -10,8 +10,8 @@ public class IntegerLiteral extends Expression {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

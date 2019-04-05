@@ -2,8 +2,8 @@ package syntaxtree;
 
 public class Program extends AbstractSyntax{
 	
-	private MainClass main;
-	private ClassDeclList classList;
+	public MainClass main;
+	public ClassDeclList classList;
 	
 	public Program(int pos, MainClass main, ClassDeclList classList) {
 		super(pos);
@@ -13,7 +13,7 @@ public class Program extends AbstractSyntax{
 	
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 }

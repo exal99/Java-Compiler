@@ -2,17 +2,17 @@ package syntaxtree;
 
 public class ArrayLookup extends Expression {
 	
-	private Expression index, value;
+	public Expression index, value;
 	
-	public ArrayLookup(int pos, Expression index, Expression value) {
+	public ArrayLookup(int pos, Expression value, Expression index) {
 		super(pos);
 		this.index = index;
 		this.value = value;
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

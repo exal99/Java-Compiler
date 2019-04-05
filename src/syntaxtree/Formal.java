@@ -2,8 +2,8 @@ package syntaxtree;
 
 public class Formal extends AbstractSyntax {
 	
-	private Type type;
-	private Identifier id;
+	public Type type;
+	public Identifier id;
 	
 	public Formal(int pos, Type type, Identifier id) {
 		super(pos);
@@ -12,8 +12,7 @@ public class Formal extends AbstractSyntax {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
 }

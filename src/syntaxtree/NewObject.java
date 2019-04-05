@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class NewObject extends Expression {
 	
-	private Identifier objName;
+	public Identifier objName;
 	
 	public NewObject(int pos, Identifier objName) {
 		super(pos);
@@ -10,8 +10,8 @@ public class NewObject extends Expression {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

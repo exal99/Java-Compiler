@@ -2,8 +2,8 @@ package syntaxtree;
 
 public class VarDecl extends AbstractSyntax{
 	
-	private Type type;
-	private Identifier name;
+	public Type type;
+	public Identifier name;
 	
 	public VarDecl(int pos, Type type, Identifier name) {
 		super(pos);
@@ -12,8 +12,7 @@ public class VarDecl extends AbstractSyntax{
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
 }

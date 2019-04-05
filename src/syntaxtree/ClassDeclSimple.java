@@ -7,8 +7,7 @@ public class ClassDeclSimple extends ClassDecl {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
 }

@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class ArrayLength extends Expression {
 	
-	private Expression array;
+	public Expression array;
 	
 	public ArrayLength(int pos, Expression array) {
 		super(pos);
@@ -10,8 +10,7 @@ public class ArrayLength extends Expression {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
 }

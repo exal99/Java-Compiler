@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class NewArray extends Expression {
 	
-	private Expression size;
+	public Expression size;
 	
 	public NewArray(int pos, Expression size) {
 		super(pos);
@@ -10,8 +10,7 @@ public class NewArray extends Expression {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
 }

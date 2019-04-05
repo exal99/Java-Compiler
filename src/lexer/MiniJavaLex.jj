@@ -6,7 +6,7 @@ import syntaxtree.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-class MiniJavaParser {
+public class MiniJavaParser {
 	public static void main(String[] args) throws FileNotFoundException, ParseException{
 		MiniJavaParser parser = new MiniJavaParser(new FileInputStream("src\\programs\\test.mjava"));
 		parser.Program();
@@ -62,11 +62,11 @@ Program Program() :
 
 Identifier Id() :
 { String name; int pos;}
-{ name = < ID >.image { return new Identifier(token.beginLine * 1000 + token.beginColumn, name); } }
+{ name = < ID >.image { return new Identifier(token.beginLine, name); } }
   
 MainClass MainClass() : 
 {int pos; Statement s; Identifier name, argName;}
-{ <CLASS> { pos=token.beginLine * 1000 + token.beginColumn; }
+{ <CLASS> { pos=token.beginLine; }
   name=Id() "{" <MAIN> "(" "String" "[]" argName=Id() ")" "{" s=Statement() "}" "}"
   { return new MainClass(pos, name, argName, s); }
 }
@@ -75,7 +75,7 @@ ClassDecl ClassDecl() :
 {int pos; Identifier name, extendName;
 VarDecl v; VarDeclList vd = new VarDeclList(-1);
 MethodDecl m; MethodDeclList md = new MethodDeclList(-1);}
-{ <CLASS> { pos = token.beginLine*1000 + token.beginColumn; }
+{ <CLASS> { pos = token.beginLine; }
 name = Id()
 (
  "{" (v=VarDecl() { vd.addElement(v); })* (m = MethodDecl() { md.addElement(m); })* "}"
@@ -100,7 +100,7 @@ VarDecl VarDecl() :
 MethodDecl MethodDecl() : 
 {int pos; Type t; Identifier i; FormalList fl; VarDecl v; VarDeclList vl = new VarDeclList(-1);
  Statement s; StatementList sl = new StatementList(-1); Expression exp;}
-{ "public" { pos=token.beginLine * 1000 + token.beginColumn; }
+{ "public" { pos=token.beginLine; }
   t=Type() i=Id() "(" fl=FormalList() ")" "{" (LOOKAHEAD(2) v=VarDecl() { vl.addElement(v); })*
   (s=Statement() { sl.addElement(s); })* <RETURN> exp=Expression() <SEMI> "}"
 {
@@ -110,7 +110,7 @@ MethodDecl MethodDecl() :
 
 FormalList FormalList() : 
 {FormalList fl = new FormalList(-1); int pos; Type t; Identifier i; Formal f;}
-{ (t=Type() { pos=token.beginLine * 1000 + token.beginColumn; }
+{ (t=Type() { pos=token.beginLine; }
    i=Id() { fl.addElement(new Formal(pos, t, i)); } (f=FormalRest() { fl.addElement(f); })*)?
 {
   return fl;
@@ -119,7 +119,7 @@ FormalList FormalList() :
 
 Formal FormalRest() : 
 {int pos; Type t; Identifier i;}
-{ "," { pos=token.beginLine * 1000 + token.beginColumn; } t=Type() i=Id()
+{ "," { pos=token.beginLine; } t=Type() i=Id()
 {
   return new Formal(pos, t, i);
 }
@@ -127,9 +127,9 @@ Formal FormalRest() :
 
 Type Type() :
 {Type t;}
-{ < INT > { t = new IntegerType(token.beginLine * 1000 + token.beginColumn); } ("[]" { t = new IntArrayType(token.beginLine * 1000 + token.beginColumn); })?
-| < BOOL > { t = new BooleanType(token.beginLine * 1000 + token.beginColumn); }
-| < ID > { t = new IdentifierType(token.beginLine * 1000 + token.beginColumn, token.image); }
+{ < INT > { t = new IntegerType(token.beginLine); } ("[]" { t = new IntArrayType(token.beginLine); })?
+| < BOOL > { t = new BooleanType(token.beginLine); }
+| < ID > { t = new IdentifierType(token.beginLine, token.image); }
 {
   return t;
 }
@@ -137,15 +137,15 @@ Type Type() :
 
 Statement Statement() :
 {int pos; Statement s1; Statement s2; StatementList sl = new StatementList(-1); Expression exp1; Expression exp2; Identifier i;}
-{ "{" { pos = token.beginLine * 1000 + token.beginColumn; } (s1 = Statement() { sl.addElement(s1); })* "}"
+{ "{" { pos = token.beginLine; } (s1 = Statement() { sl.addElement(s1); })* "}"
   { return new Block(pos, sl); }
-| <IF> { pos = token.beginLine * 1000 + token.beginColumn; } "(" exp1=Expression() ")" s1=Statement() <ELSE> s2=Statement()
+| <IF> { pos = token.beginLine; } "(" exp1=Expression() ")" s1=Statement() <ELSE> s2=Statement()
   { return new If(pos, exp1, s1, s2); }
-| < WHILE > { pos = token.beginLine * 1000 + token.beginColumn; } "(" exp1=Expression() ")" s1=Statement()
+| < WHILE > { pos = token.beginLine; } "(" exp1=Expression() ")" s1=Statement()
   { return new While(pos, exp1, s1); }
-| < PRINT > { pos = token.beginLine * 1000 + token.beginColumn; } "(" exp1=Expression() ")" < SEMI >
+| < PRINT > { pos = token.beginLine; } "(" exp1=Expression() ")" < SEMI >
   { return new Print(pos, exp1); }
-| i=Id() { pos = token.beginLine * 1000 + token.beginColumn; } (
+| i=Id() { pos = token.beginLine; } (
      < ASSIGN > exp1=Expression() < SEMI >
     { return new Assign(pos, i, exp1); } 
   |  "[" exp1=Expression() "]" < ASSIGN > exp2=Expression() < SEMI >
@@ -155,17 +155,17 @@ Statement Statement() :
 
 Expression Expression() :
 {int pos; Identifier i; Expression exp;}
-{ < NUM >   { pos= token.beginLine * 1000 + token.beginColumn; } exp=ExpressionRest(pos, new IntegerLiteral(pos, Integer.parseInt(token.image))) { return exp; }
-| < TRUE >  { pos= token.beginLine * 1000 + token.beginColumn; } exp=ExpressionRest(pos, new True(pos)) { return exp; }
-| < FALSE > { pos= token.beginLine * 1000 + token.beginColumn; } exp=ExpressionRest(pos, new False(pos)) { return exp; }
-| < ID >    { pos= token.beginLine * 1000 + token.beginColumn; } exp=ExpressionRest(pos, new IdentifierExpression(pos, token.image)) { return exp; }
-| < THIS >  { pos= token.beginLine * 1000 + token.beginColumn; } exp=ExpressionRest(pos, new This(pos)) { return exp; }
-| < NEW >   { pos = token.beginLine * 1000 + token.beginColumn;}
+{ < NUM >   { pos= token.beginLine; } exp=ExpressionRest(pos, new IntegerLiteral(pos, Integer.parseInt(token.image))) { return exp; }
+| < TRUE >  { pos= token.beginLine; } exp=ExpressionRest(pos, new True(pos)) { return exp; }
+| < FALSE > { pos= token.beginLine; } exp=ExpressionRest(pos, new False(pos)) { return exp; }
+| < ID >    { pos= token.beginLine; } exp=ExpressionRest(pos, new IdentifierExpression(pos, token.image)) { return exp; }
+| < THIS >  { pos= token.beginLine; } exp=ExpressionRest(pos, new This(pos)) { return exp; }
+| < NEW >   { pos = token.beginLine;}
   (
       i=Id() "(" ")" exp=ExpressionRest(pos, new NewObject(pos, i)) { return exp; }
     | < INT > "[" exp=Expression() "]" { return new NewArray(pos, exp); }
   )
-| "!" { pos=token.beginLine * 1000 + token.beginColumn; } exp=Expression() { return new Not(pos, exp); }
+| "!" { pos=token.beginLine; } exp=Expression() { return new Not(pos, exp); }
 | "(" exp=Expression() ")" { return exp; }
 }
 

@@ -1,8 +1,9 @@
 package syntaxtree;
 
 public class MainClass extends AbstractSyntax{
-	Identifier className, varName;
-	Statement statement;
+	
+	public Identifier className, varName;
+	public Statement statement;
 	
 	public MainClass(int pos, Identifier className, Identifier varName, Statement statement) {
 		super(pos);
@@ -11,9 +12,8 @@ public class MainClass extends AbstractSyntax{
 		this.statement = statement;
 	}
 
-
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 }

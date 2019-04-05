@@ -7,7 +7,7 @@ public abstract class AbstractSyntax {
 		this.pos = pos;
 	}
 	
-	public abstract void accept(Visitor v);
+	public abstract <E> E accept(Visitor<E> v);
 	
 	public int getPos() {
 		return pos;

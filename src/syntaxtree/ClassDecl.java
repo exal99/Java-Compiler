@@ -2,9 +2,9 @@ package syntaxtree;
 
 public abstract class ClassDecl extends AbstractSyntax {
 	
-	protected Identifier className;
-	protected VarDeclList vars;
-	protected MethodDeclList methods;
+	public Identifier className;
+	public VarDeclList vars;
+	public MethodDeclList methods;
 	
 	protected ClassDecl(int pos, Identifier className, VarDeclList vars, MethodDeclList methods) {
 		super(pos);

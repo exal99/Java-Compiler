@@ -2,16 +2,20 @@ package syntaxtree;
 
 public class Identifier extends AbstractSyntax {
 	
-	private String id;
+	public String id;
 	
 	public Identifier(int pos, String id) {
 		super(pos);
 		this.id = id;
 	}
-
+	
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
-
+	
+	@Override
+	public String toString() {
+		return id;
+	}
 }

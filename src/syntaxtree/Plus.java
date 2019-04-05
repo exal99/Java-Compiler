@@ -2,7 +2,7 @@ package syntaxtree;
 
 public class Plus extends Expression {
 	
-	private Expression left, right;
+	public Expression left, right;
 	
 	public Plus(int pos, Expression left, Expression right) {
 		super(pos);
@@ -11,8 +11,8 @@ public class Plus extends Expression {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }

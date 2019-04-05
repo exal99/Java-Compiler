@@ -2,9 +2,9 @@ package syntaxtree;
 
 public class Call extends Expression {
 	
-	private Expression obj;
-	private Identifier method;
-	private ExpressionList args;
+	public Expression obj;
+	public Identifier method;
+	public ExpressionList args;
 	
 	public Call(int pos, Expression obj, Identifier method, ExpressionList args) {
 		super(pos);
@@ -14,8 +14,8 @@ public class Call extends Expression {
 	}
 
 	@Override
-	public void accept(Visitor v) {
-		v.visit(this);
+	public <E> E accept(Visitor<E> v) {
+		return v.visit(this);
 	}
 
 }
