@@ -7,10 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class MiniJavaParser {
-	public static void main(String[] args) throws FileNotFoundException, ParseException{
-		MiniJavaParser parser = new MiniJavaParser(new FileInputStream("src\\programs\\test.mjava"));
-		parser.Program();
-	}
 }
 
 
@@ -127,12 +123,9 @@ Formal FormalRest() :
 
 Type Type() :
 {Type t;}
-{ < INT > { t = new IntegerType(token.beginLine); } ("[]" { t = new IntArrayType(token.beginLine); })?
-| < BOOL > { t = new BooleanType(token.beginLine); }
-| < ID > { t = new IdentifierType(token.beginLine, token.image); }
-{
-  return t;
-}
+{ < INT > { t = new IntegerType(token.beginLine); } ("[]" { t = new IntArrayType(token.beginLine); })? { return t; }
+| < BOOL > { t = new BooleanType(token.beginLine); } { return t; }
+| < ID > { t = new IdentifierType(token.beginLine, token.image); } { return t; }
 }
 
 Statement Statement() :
